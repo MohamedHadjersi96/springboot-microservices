@@ -2,6 +2,7 @@ package com.microservices.employeeservice.service;
 
 import com.microservices.employeeservice.dto.EmployeeDto;
 import com.microservices.employeeservice.entity.Employee;
+import com.microservices.employeeservice.exception.ResourceNotFoundException;
 import com.microservices.employeeservice.mapper.EmployeeMapper;
 import com.microservices.employeeservice.repository.EmployeeRepository;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
   @Override
   public EmployeeDto getEmployee(Long employeeId) {
-    final Employee employee = employeeRepository.findById(employeeId).get();
+     final Employee employee = employeeRepository.findById(employeeId)
+             .orElseThrow(
+                     ()-> new ResourceNotFoundException("Employee","id", employeeId)
+             );
     //  *** using ModelMapper library ***
     //return modelMapper.map(employee, EmployeeDto.class);
 

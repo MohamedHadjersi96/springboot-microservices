@@ -2,12 +2,15 @@ package com.microservices.departmentservice.service;
 
 import com.microservices.departmentservice.dto.DepartmentDto;
 import com.microservices.departmentservice.entity.Department;
+import com.microservices.departmentservice.exception.ResourceNotFoundException;
 import com.microservices.departmentservice.mapper.DepartmentMapper;
 import com.microservices.departmentservice.repository.DepartmentRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -33,7 +36,11 @@ public class DepartmentServiceImpl implements  DepartmentService{
   @Override
   public DepartmentDto getDepartmentByCode(String departmentCode) {
 
-    final  Department department = departmentRepository.findByDepartmentCode(departmentCode);
+    final Optional<Department> department = departmentRepository.findByDepartmentCode(departmentCode);
+    if(department.isEmpty()){
+      throw new  ResourceNotFoundException("Department","code", departmentCode);
+    }
+
     //  *** using ModelMapper library ***
     return modelMapper.map(department, DepartmentDto.class);
 
