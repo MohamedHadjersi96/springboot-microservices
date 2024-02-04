@@ -1,7 +1,7 @@
 package com.microservices.employeeservice.controller;
 
+import com.microservices.employeeservice.dto.APIResponseDto;
 import com.microservices.employeeservice.dto.EmployeeDto;
-import com.microservices.employeeservice.entity.Employee;
 import com.microservices.employeeservice.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,9 +25,9 @@ public class EmployeeController {
 
   // build get employee REST API
   @GetMapping("{id}")
-  public ResponseEntity<EmployeeDto> getEmployee(@PathVariable("id") Long employeeId){
-    final EmployeeDto employee = employeeService.getEmployee(employeeId);
-    return new ResponseEntity<>(employee, HttpStatus.OK);
+  public ResponseEntity<APIResponseDto> getEmployee(@PathVariable("id") Long employeeId){
+    final APIResponseDto apiResponseDto = employeeService.getEmployee(employeeId);
+    return new ResponseEntity<>(apiResponseDto, HttpStatus.OK);
   }
 
 

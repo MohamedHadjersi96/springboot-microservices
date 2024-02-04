@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("api/departments")
@@ -22,10 +24,16 @@ public class DepartmentController {
   }
 
   // build get department REST API
-  @GetMapping("{departmentCode}")
-  public ResponseEntity<DepartmentDto> getDepartment(@PathVariable String departmentCode){
+  @GetMapping("{department-code}")
+  public ResponseEntity<DepartmentDto> getDepartment(@PathVariable("department-code") String departmentCode){
     final DepartmentDto department = departmentService.getDepartmentByCode(departmentCode);
     return new ResponseEntity<>(department, HttpStatus.OK);
+  }
+
+  @GetMapping
+  public ResponseEntity<List<DepartmentDto>> getDepartments(){
+    final List<DepartmentDto> departments = departmentService.getDepartments();
+    return new ResponseEntity<>(departments, HttpStatus.OK);
   }
 
 }

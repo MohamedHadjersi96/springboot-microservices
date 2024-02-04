@@ -10,4 +10,5 @@ public interface DepartmentService {
    DepartmentDto getDepartmentByCode(String departmentCode);
 
 
+   List<DepartmentDto> getDepartments();
 }

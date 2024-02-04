@@ -6,25 +6,19 @@ import com.microservices.departmentservice.exception.ResourceNotFoundException;
 import com.microservices.departmentservice.mapper.DepartmentMapper;
 import com.microservices.departmentservice.repository.DepartmentRepository;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
 @Service
 public class DepartmentServiceImpl implements  DepartmentService{
-
   private DepartmentRepository departmentRepository;
-  private ModelMapper modelMapper;
+
   @Override
   public DepartmentDto saveDepartment(DepartmentDto departmentDto) {
-
-    //  *** using ModelMapper library ***
-    /* final Department department = modelMapper.map(departmentDto, Department.class);
-    final Department saveDepartment = departmentRepository.save(department);
-    return modelMapper.map(saveDepartment, DepartmentDto.class);*/
 
     //  *** using mapStruct library ***
     final Department department = DepartmentMapper.DEPARTMENT_MAPPER.mapToDepartment(departmentDto);
@@ -40,12 +34,20 @@ public class DepartmentServiceImpl implements  DepartmentService{
     if(department.isEmpty()){
       throw new  ResourceNotFoundException("Department","code", departmentCode);
     }
-
-    //  *** using ModelMapper library ***
-    return modelMapper.map(department, DepartmentDto.class);
-
     //  *** using mapStruct library ***
-    //return DepartmentMapper.DEPARTMENT_MAPPER.mapToDepartmentDto(department);
+    return DepartmentMapper.DEPARTMENT_MAPPER.mapToDepartmentDto(department.get());
 
+  }
+
+  @Override
+  public List<DepartmentDto> getDepartments() {
+
+    final List<Department> departments = departmentRepository.findAll();
+    final List<DepartmentDto> result = new ArrayList<>();
+    for(Department department : departments){
+      final DepartmentDto departmentDto = DepartmentMapper.DEPARTMENT_MAPPER.mapToDepartmentDto(department);
+      result.add(departmentDto);
+    }
+    return result;
   }
 }
